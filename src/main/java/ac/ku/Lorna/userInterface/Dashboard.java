@@ -42,7 +42,7 @@ public class Dashboard extends JFrame {
         // Adding action listeners to each button
         membersButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Dashboard.this, "You clicked manage members!"); // This opens the manage members (To be implemented)
+             new MemberManagement();
             }
         });
 
