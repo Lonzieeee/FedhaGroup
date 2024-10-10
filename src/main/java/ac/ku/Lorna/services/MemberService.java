@@ -46,4 +46,33 @@ public class MemberService {
             e.printStackTrace();
         }
     }
+
+    //DELETE A MEMBER FROM THE DATABASE
+    public void deleteMember(String memberName) {
+        String deleteQuery = "DELETE FROM members WHERE name = ?";
+        try {
+            QueryExecutor.executeUpdate(deleteQuery, memberName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Get the total count of membrs for pagination
+    public int getTotalMemberCount() {
+        String countQuery = "SELECT COUNT(*) FROM members";
+        try {
+            List<Integer> counts = QueryExecutor.executeQuery(countQuery, rs -> {
+                if (rs.next()) {
+                    return rs.getInt(1);
+                }
+                return 0;
+            });
+            return (counts != null && !counts.isEmpty()) ? counts.get(0) : 0;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0;
+        }
+    }
 }
+
+

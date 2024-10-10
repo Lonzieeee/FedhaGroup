@@ -15,27 +15,64 @@ import java.awt.event.ActionListener;
 public class Dashboard extends JFrame {
     public Dashboard() {
         setTitle("Fedha Youth Group System - Dashboard");
-        setSize(500, 400);
+        setSize(600, 500);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // To centre the window
+        setLocationRelativeTo(null); // To centre the
 
-        // Creating a panel using a grid layout to organize buttons
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(3, 2, 10, 10));
-        JButton membersButton = new JButton("Manage Members");
-        JButton loansButton = new JButton("View Loans");
-        JButton sharesButton = new JButton("Manage Shares");
-        JButton fixedDepositsButton = new JButton("Fixed Deposits");
-        JButton reportsButton = new JButton("Generate Reports");
-        JButton logoutButton = new JButton("Logout");
+        getContentPane().setBackground(new Color(230, 240, 255));
 
-        // Add buttons to panel
-        panel.add(membersButton);
-        panel.add(loansButton);
-        panel.add(sharesButton);
-        panel.add(fixedDepositsButton);
-        panel.add(reportsButton);
-        panel.add(logoutButton);
+        // Creating a panel using a gridbaglayout
+        JPanel panel = new JPanel(new GridBagLayout());
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(15, 15, 15, 15);  //Padding around each button
+        panel.setBackground(new Color(230, 240, 255));
+
+        //TITLE LABEL WITH STYLING
+
+        JLabel titleLabel = new JLabel("Fedha Youth Group Dashboard");
+        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        titleLabel.setForeground(new Color(0, 102, 204));
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 2; //Title spans 2 columns
+        constraints.anchor = GridBagConstraints.CENTER;
+        panel.add(titleLabel, constraints);
+
+        JButton membersButton = createStyledButton("Manage Members");
+        JButton loansButton = createStyledButton("View Loans");
+        JButton sharesButton = createStyledButton("Manage Shares");
+        JButton fixedDepositsButton = createStyledButton("Fixed Deposits");
+        JButton reportsButton = createStyledButton("Generate Reports");
+        JButton logoutButton = createStyledButton("Logout");
+
+        //Adding buttons to panel with proper positioning
+        constraints.gridwidth=1;
+        constraints.anchor = GridBagConstraints.CENTER;  //Centres all buttons
+
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        panel.add(membersButton, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        panel.add(loansButton, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        panel.add(sharesButton, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        panel.add(fixedDepositsButton, constraints);
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        panel.add(reportsButton, constraints);
+
+        constraints.gridx = 1;
+        constraints.gridy = 3;
+        panel.add(logoutButton, constraints);
+
 
         add(panel); // This adds the whole panel to the frame
 
@@ -72,7 +109,22 @@ public class Dashboard extends JFrame {
         setVisible(true); // This displays the dashboard
     }
 
+
+    //METHOD TO CREATE A BUTTON WITH CUSTOM STYLING
+    private JButton createStyledButton(String text) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.BOLD, 16));
+        button.setBackground(new Color(0, 153, 255));
+        button.setForeground(Color.WHITE);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setPreferredSize(new Dimension(180, 40)); //Fixed size for Button
+        return button;
+
+    }
+
     public static void main(String[] args) {
+
         new Dashboard();
     }
 }

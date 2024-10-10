@@ -19,8 +19,12 @@ import java.util.List;
 public class MemberManagement extends JFrame {
     private JTable membersTable;
     private DefaultTableModel tableModel;
+    private MemberService memberService;
+    private int currentPage = 1;
+    private int rowsPerPage =10;
 
     public MemberManagement() {
+        memberService = new MemberService(); //Initializes member service
         setTitle("Manage Members - Fedha Youth Group");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -34,6 +38,14 @@ public class MemberManagement extends JFrame {
         membersTable = new JTable(tableModel);
         JScrollPane tableScrollPane = new JScrollPane(membersTable);
 
+        //PAGINATION CONTROL BUTTONS
+        JPanel paginationPanel = new JPanel();
+        JButton previousButton = new JButton("Previous");
+        JButton nextButton = new JButton("Next");
+        paginationPanel.add(previousButton);
+        paginationPanel.add(nextButton);
+
+
         // Button setup
         JPanel buttonPanel = new JPanel();
         JButton addButton = new JButton("Add Member");
@@ -44,9 +56,30 @@ public class MemberManagement extends JFrame {
         buttonPanel.add(deleteButton);
 
         // Add components to main panel
-        panel.add(buttonPanel, BorderLayout.SOUTH);
+        panel.add(buttonPanel, BorderLayout.NORTH);
         panel.add(tableScrollPane, BorderLayout.CENTER);
+        panel.add(paginationPanel, BorderLayout.SOUTH);
         add(panel);
+
+        loadMembers(); // Loading initial page of members
+
+        //PAGINATION BUTTON ACTIONS
+        previousButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                if (currentPage > 1) {
+                    currentPage--;
+                    loadMembers();
+                }
+            }
+        });
+
+        nextButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+
+                    currentPage++;
+                loadMembers();
+            }
+        });
 
         // Button action listeners
         addButton.addActionListener(new ActionListener() {
@@ -70,7 +103,9 @@ public class MemberManagement extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int selectedRow = membersTable.getSelectedRow();
                 if (selectedRow >= 0) {
-                    tableModel.removeRow(selectedRow);
+                    String memberName = tableModel.getValueAt(selectedRow, 0).toString();
+                  memberService.deleteMember(memberName); //Call service to delete
+                    loadMembers(); //Reload memebers after deletion
                 } else {
                     JOptionPane.showMessageDialog(MemberManagement.this, "Please select a member to delete.");
                 }
@@ -78,6 +113,17 @@ public class MemberManagement extends JFrame {
         });
 
         setVisible(true);
+    }
+
+    private void loadMembers() {
+        int offset = (currentPage - 1) * rowsPerPage;
+        List<Member> members = memberService.loadMembers( rowsPerPage,offset);
+        if (members != null) {
+            tableModel.setRowCount(0); //THIS CLEEARS THETABLE BEFORE ADDING NEW DATA
+            for (Member member : members) {
+                tableModel.addRow(new Object[]{member.getName(),member.getAge(),member.getShares(),member.getRegistrationFee()});
+            }
+        }
     }
 
     private void showAddMemberForm() {

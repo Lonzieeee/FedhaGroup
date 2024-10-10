@@ -8,6 +8,7 @@ package ac.ku.Lorna.userInterface;
  **/
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -22,30 +23,68 @@ public class FedhaLogin {
         // Creating the panel that holds the components
         JPanel panel = new JPanel();
         frame.add(panel);
-        panel.setLayout(null);
+        panel.setLayout(new GridBagLayout()); //For better alignment
+        panel.setBackground(new Color(240, 240, 240));
+
+
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.insets = new Insets(10, 10, 10, 10);  //To add padding
+
+
+        //TITLE LABEL FOR THE LOGIN FORM
+
+        JLabel titlelabel = new JLabel("Login To Fedha System");
+        titlelabel.setFont(new Font("Arial", Font.BOLD, 20)); //Larger font
+        titlelabel.setForeground(new Color(0, 102, 204)); //Colour for the title
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        constraints.gridwidth = 2;
+        constraints.anchor = GridBagConstraints.CENTER;
+        panel.add(titlelabel, constraints);
 
         // Creating a username label and textfield
-        JLabel userLabel = new JLabel("Username:");
-        userLabel.setBounds(50, 50, 80, 25);
-        panel.add(userLabel);
 
-        JTextField userText = new JTextField(20);
-        userText.setBounds(150, 50, 165, 25);
-        panel.add(userText);
+
+        JLabel userLabel = new JLabel("Username:");
+        constraints.gridx = 0;
+        constraints.gridy = 1;
+        constraints.gridwidth = 1;
+        constraints.anchor = GridBagConstraints.LINE_END;  //Aligns label to the right
+
+        panel.add(userLabel , constraints);
+
+        JTextField userText = new JTextField(15);
+        constraints.gridx = 1;
+        constraints.gridy = 1;
+        constraints.anchor = GridBagConstraints.LINE_START;  //Alligns textfield to the left
+        panel.add(userText , constraints);
+
 
         // Creating a password label and password field
         JLabel passwordLabel = new JLabel("Password:");
-        passwordLabel.setBounds(50, 90, 80, 25);
-        panel.add(passwordLabel);
+        constraints.gridx = 0;
+        constraints.gridy = 2;
+        constraints.anchor = GridBagConstraints.LINE_END;
+        panel.add(passwordLabel , constraints);
 
-        JPasswordField passwordText = new JPasswordField(20);
-        passwordText.setBounds(150, 90, 165, 25);
-        panel.add(passwordText);
+        JPasswordField passwordText = new JPasswordField(15);
+        constraints.gridx = 1;
+        constraints.gridy = 2;
+        constraints.anchor = GridBagConstraints.LINE_START;
+        panel.add(passwordText , constraints);
 
         // Creating the login button
         JButton loginButton = new JButton("Login");
-        loginButton.setBounds(50, 150, 80, 25);
-        panel.add(loginButton);
+        loginButton.setBackground(new Color(0, 102, 204));
+        loginButton.setForeground(Color.WHITE);
+        loginButton.setFont(new Font("Arial", Font.BOLD, 14));
+        loginButton.setFocusPainted(false);   //This removes the button focus border
+
+        constraints.gridx = 0;
+        constraints.gridy = 3;
+        constraints.gridwidth = 2;  //Spans 2 columns making it centred
+        constraints.anchor = GridBagConstraints.CENTER;
+        panel.add(loginButton, constraints);
 
         // Login button action listener
         loginButton.addActionListener(new ActionListener() {
