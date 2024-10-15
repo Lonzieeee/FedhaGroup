@@ -8,15 +8,17 @@ import com.zaxxer.hikari.HikariDataSource;
 import javax.sql.DataSource;
 import java.io.InputStream;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class DataSourceConfig {
 
     private static final HikariConfig hikariConfig = new HikariConfig();
-
+private static final Logger LOGGER  =Logger.getLogger(DataSourceConfig.class.getName());
     static {
         try (InputStream input = DataSourceConfig.class.getClassLoader().getResourceAsStream("db.properties")) {
             if (input == null) {
-                System.out.println("Sorry, unable to find db.properties");
+       LOGGER.severe("Unable to find db.properties");
+                throw new RuntimeException("db.properties not found");
             }
 
             Properties prop = new Properties();
@@ -31,7 +33,8 @@ public class DataSourceConfig {
             hikariConfig.setConnectionTimeout(Long.parseLong(prop.getProperty("connectionTimeout")));
             hikariConfig.setPoolName(prop.getProperty("poolName"));
         } catch (Exception ex) {
-            ex.printStackTrace();
+            LOGGER.severe("Error loading database configuration: " + ex.getMessage());
+            throw new RuntimeException("Failed to configure data source", ex);
         }
     }
 

@@ -85,7 +85,7 @@ public class Dashboard extends JFrame {
 
         loansButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Dashboard.this, "You clicked view loans!");
+               new LoanManagement();
             }
         });
 

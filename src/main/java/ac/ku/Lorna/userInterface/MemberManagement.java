@@ -161,8 +161,9 @@ public class MemberManagement extends JFrame {
                 double registrationFee = Double.parseDouble(registrationFeeField.getText());
 
                 Member newMember = new Member(name, age, shares, registrationFee);
-                tableModel.addRow(new Object[]{newMember.getName(), newMember.getAge(), newMember.getShares(), newMember.getRegistrationFee()});
+memberService.addMember(newMember); //adds to database
 
+                loadMembers(); //Reload members after adding
                 addMemberDialog.dispose();
             } catch (NumberFormatException ex) {
                 JOptionPane.showMessageDialog(MemberManagement.this, "Please enter a valid number.");
@@ -212,6 +213,9 @@ public class MemberManagement extends JFrame {
                 int age = Integer.parseInt(ageField.getText());
                 double shares = Double.parseDouble(sharesField.getText());
                 double registrationFee = Double.parseDouble(registrationFeeField.getText());
+
+                Member updatedMember = new Member(name, age, shares, registrationFee);
+                memberService.editMember(updatedMember,rowIndex+1);
 
                 tableModel.setValueAt(name, rowIndex, 0);
                 tableModel.setValueAt(age, rowIndex, 1);
