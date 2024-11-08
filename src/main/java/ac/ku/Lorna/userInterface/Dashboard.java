@@ -1,130 +1,135 @@
 package ac.ku.Lorna.userInterface;
 
-/**
- * FedhaGroup (ac.ku.Lorna.userInterface)
- * Created by: user
- * On: 10/5/2024 7:59 AM
- * Description:
- **/
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Dashboard extends JFrame {
-    public Dashboard() {
-        setTitle("Fedha Youth Group System - Dashboard");
-        setSize(600, 500);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setLocationRelativeTo(null); // To centre the
+public class Dashboard extends JPanel {
 
-        getContentPane().setBackground(new Color(230, 240, 255));
+    public Dashboard(MainFrame mainFrame) {
+        setLayout(new BorderLayout());
+        setBackground(new Color(240, 240, 240));  // Light background color
 
-        // Creating a panel using a gridbaglayout
-        JPanel panel = new JPanel(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.insets = new Insets(15, 15, 15, 15);  //Padding around each button
-        panel.setBackground(new Color(230, 240, 255));
+        // Title label with a simple fade-in effect
+        JLabel titleLabel = new JLabel("Welcome to Fedha Youth Group System", JLabel.CENTER);
+        titleLabel.setFont(new Font("Verdana", Font.BOLD, 28));
+        titleLabel.setForeground(new Color(0, 51, 102));  // Dark blue for the title
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(20, 0, 40, 0));  // Padding around the title
 
-        //TITLE LABEL WITH STYLING
+        // Add title label
+        add(titleLabel, BorderLayout.NORTH);
 
-        JLabel titleLabel = new JLabel("Fedha Youth Group Dashboard");
-        titleLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        titleLabel.setForeground(new Color(0, 102, 204));
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.gridwidth = 2; //Title spans 2 columns
-        constraints.anchor = GridBagConstraints.CENTER;
-        panel.add(titleLabel, constraints);
+        // Create button panel with slide-in effect from left
+        JPanel buttonPanel = new JPanel();
+        buttonPanel.setLayout(new GridLayout(2, 2, 20, 20));  // 2x2 grid with 20px spacing between buttons
+        buttonPanel.setBackground(new Color(240, 240, 240));  // Transparent background for the panel
+        buttonPanel.setBorder(BorderFactory.createEmptyBorder(0, 50, 50, 50));  // Padding for button panel
 
-        JButton membersButton = createStyledButton("Manage Members");
-        JButton loansButton = createStyledButton("View Loans");
-        JButton sharesButton = createStyledButton("Manage Shares");
-        JButton fixedDepositsButton = createStyledButton("Fixed Deposits");
-        JButton reportsButton = createStyledButton("Generate Reports");
-        JButton logoutButton = createStyledButton("Logout");
+        // Create and add buttons
+        JButton memberManagementButton = createStyledButton("Member Management", mainFrame, "MemberManagement");
+        JButton loanApplicationButton = createStyledButton("Loan Application", mainFrame, "LoanApplication");
+        JButton fixedDepositButton = createStyledButton("Fixed Deposit", mainFrame, "FixedDeposit");
+        JButton reportsButton = createStyledButton("Reports", mainFrame, "ReportsScreen");
 
-        //Adding buttons to panel with proper positioning
-        constraints.gridwidth=1;
-        constraints.anchor = GridBagConstraints.CENTER;  //Centres all buttons
+        // Add buttons to the panel
+        buttonPanel.add(memberManagementButton);
+        buttonPanel.add(loanApplicationButton);
+        buttonPanel.add(fixedDepositButton);
+        buttonPanel.add(reportsButton);
 
-        constraints.gridx = 0;
-        constraints.gridy = 1;
-        panel.add(membersButton, constraints);
+        // Add button panel to the main layout
+        add(buttonPanel, BorderLayout.CENTER);
 
-        constraints.gridx = 1;
-        constraints.gridy = 1;
-        panel.add(loansButton, constraints);
+        // Slide-in effect for the button panel
+        slideIn(buttonPanel);
 
-        constraints.gridx = 0;
-        constraints.gridy = 2;
-        panel.add(sharesButton, constraints);
+        // Button fade-in effect one by one
+        fadeInButtons(buttonPanel);
+    }
 
-        constraints.gridx = 1;
-        constraints.gridy = 2;
-        panel.add(fixedDepositsButton, constraints);
+    private JButton createStyledButton(String text, MainFrame mainFrame, String screenName) {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Arial", Font.PLAIN, 18));
+        button.setBackground(new Color(0, 102, 204));  // Same blue color for all buttons
+        button.setForeground(Color.WHITE);  // White text color
+        button.setFocusPainted(false);
+        button.setPreferredSize(new Dimension(200, 200));  // Larger button size (200x200)
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));  // Pointer cursor on hover
 
-        constraints.gridx = 0;
-        constraints.gridy = 3;
-        panel.add(reportsButton, constraints);
+        // Apply rounded corners using an empty border
+        button.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));  // Padding around text
 
-        constraints.gridx = 1;
-        constraints.gridy = 3;
-        panel.add(logoutButton, constraints);
+        // Action listener for screen transition
+        button.addActionListener(e -> {
+            System.out.println("Switching to " + screenName);
+            mainFrame.showScreen(screenName);  // Assuming showScreen() is implemented in MainFrame
+        });
 
+        // Hover effect: Bounce animation and color change
+        button.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                Timer timer = new Timer(10, new ActionListener() {
+                    int yOffset = 0;
+                    public void actionPerformed(ActionEvent e) {
+                        if (yOffset < 10) {  // Bounce effect by moving the button up and down
+                            yOffset++;
+                            button.setLocation(button.getX(), button.getY() - 1);  // Move button up
+                        } else if (yOffset < 20) {
+                            yOffset++;
+                            button.setLocation(button.getX(), button.getY() + 1);  // Move button down
+                        }
+                    }
+                });
+                timer.start();
 
-        add(panel); // This adds the whole panel to the frame
+                // Change button color on hover
+                button.setBackground(new Color(0, 153, 255));  // Lighter blue on hover
+            }
 
-        // Adding action listeners to each button
-        membersButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-             new MemberManagement();
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                button.setLocation(button.getX(), button.getY());  // Reset to original position
+
+                // Revert button color to original on mouse exit
+                button.setBackground(new Color(0, 102, 204));  // Original blue color
             }
         });
 
-        loansButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-               new LoanManagement();
-            }
-        });
+        return button;
+    }
 
-        sharesButton.addActionListener(new ActionListener() {
+    // Slide-in effect for the button panel
+    private void slideIn(JPanel panel) {
+        Timer timer = new Timer(10, new ActionListener() {
+            int xOffset = -panel.getWidth();  // Start with the panel off-screen
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Dashboard.this, "You clicked view shares!");
-            }
-        });
-
-        // Logout button functionality
-        logoutButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                int confirm = JOptionPane.showConfirmDialog(Dashboard.this, "Are you sure you want to logout?", "Logout", JOptionPane.YES_NO_OPTION);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    dispose(); // This closes the dashboard
-                    new FedhaLogin(); // This opens the login screen
+                if (xOffset < 0) {
+                    xOffset += 10;  // Gradually move the panel to the right
+                    panel.setLocation(xOffset, panel.getY());
+                } else {
+                    ((Timer)e.getSource()).stop();  // Stop the timer when the panel is fully visible
                 }
             }
         });
-
-        setVisible(true); // This displays the dashboard
+        timer.start();
     }
 
-
-    //METHOD TO CREATE A BUTTON WITH CUSTOM STYLING
-    private JButton createStyledButton(String text) {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Arial", Font.BOLD, 16));
-        button.setBackground(new Color(0, 153, 255));
-        button.setForeground(Color.WHITE);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setPreferredSize(new Dimension(180, 40)); //Fixed size for Button
-        return button;
-
-    }
-
-    public static void main(String[] args) {
-
-        new Dashboard();
+    // Fade-in effect for the buttons one by one
+    private void fadeInButtons(JPanel panel) {
+        Component[] components = panel.getComponents();
+        Timer timer = new Timer(200, new ActionListener() {
+            int index = 0;  // Start with the first button
+            public void actionPerformed(ActionEvent e) {
+                if (index < components.length) {
+                    JButton button = (JButton) components[index];
+                    button.setOpaque(true);  // Make button visible
+                    button.setBackground(new Color(0, 102, 204));  // Set the background to blue
+                    index++;
+                } else {
+                    ((Timer)e.getSource()).stop();  // Stop the timer when all buttons are visible
+                }
+            }
+        });
+        timer.start();
     }
 }
